@@ -30,9 +30,9 @@ def get_msg(img):
     i = Image.open('%s.ste' % img)
     secret = stg.extract_msg(i)
     mac = secret.split('--:--')[0]
-    print 'HMAC hex is: \n%s\n' % mac.encode('hex')
+    print('HMAC hex is: \n%s\n' % mac.encode('hex'))
     data = secret.split('--:--')[1]
-    print 'The hidden message is: \n%s\n' % data
+    print('The hidden message is: \n%s\n' % data)
     check_hmac(mac)
     i.show()
 
@@ -43,7 +43,7 @@ def check_hmac(mac, data):
     a new hmac with the supplied password and the data.
     """
     h_mac = hmac.new(args['m'], bytes(data), digestmod=hashlib.sha256).digest()
-    print 'HMAC validation: \n%s\n' % str(h_mac == mac)
+    print('HMAC validation: \n%s\n' % str(h_mac == mac))
 
 
 def hash_128_bit_pass(passwd):
@@ -110,7 +110,7 @@ def encrypt(data_type):
     # data to disk with the extension .ste
     matroschka.save(args['image'])
 
-    print "successfully encrypted your secret message"
+    print("successfully encrypted your secret message")
     matroschka.show()
 
 
@@ -120,7 +120,7 @@ def decrypt():
     matroschka = stg.extract_msg(image)
 
     if matroschka is None:
-        print "No message was extracted"
+        print("No message was extracted")
         return 1
 
     # get the 8 byte iv and the encrypted secret from the image data
@@ -137,15 +137,15 @@ def decrypt():
 
     if data_type == 'image':
         ipath = "resources/secret-image.png"
-        print "the secret image is stored under: " + ipath
+        print("the secret image is stored under: " + ipath)
         fh = open(ipath, "wb")
         fh.write(data.decode('base64'))
         fh.close()
         Image.open(ipath).show()
     else:
-        print 'The hidden message is: \n%s\n' % data
+        print('The hidden message is: \n%s\n' % data)
 
-    print 'HMAC hex is: \n%s\n' % mac.encode('hex')
+    print('HMAC hex is: \n%s\n' % mac.encode('hex'))
     check_hmac(mac, data)
 
 
@@ -175,13 +175,13 @@ if __name__ == '__main__':
             data_type = 'text'
             data = read_text(args['data'])
         else:
-            print "need secret message either as .txt or .png file"
+            print("need secret message either as .txt or .png file")
             sys.exit(0)
 
     if args['image']:
         image = read_image(args['image'])
     else:
-        print "need image to embed data"
+        print("need image to embed data")
         sys.exit(0)
 
     # encrypt the secret message
